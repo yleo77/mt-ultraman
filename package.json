@@ -15,8 +15,16 @@
     "clean-css": "2.2.13",
     "colors": "^1.0.3",
     "gaze": "0.5.1",
-    "incrementify": "^0.3.0",
+    "incrementify": "^0.3.1",
     "keypress": "^0.2.1",
     "uglify-js": "2.4.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yleo77/mt-ultraman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yleo77/mt-ultraman/issues"
+  },
+  "homepage": "https://github.com/yleo77/mt-ultraman"
 }
