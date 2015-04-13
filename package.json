@@ -1,0 +1,22 @@
+{
+  "name": "mt-ultraman",
+  "version": "0.1.0",
+  "description": "手机腾讯网前端自动化工具",
+  "keywords": [
+    "workflow", "mt"
+  ],
+  "author": "yleo77",
+  "license": "MIT",
+  "peerDependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "clean-css": "2.2.13",
+    "colors": "^1.0.3",
+    "gaze": "0.5.1",
+    "incrementify": "^0.3.0",
+    "keypress": "^0.2.1",
+    "uglify-js": "2.4.15"
+  }
+}
