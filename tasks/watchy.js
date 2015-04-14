@@ -4,8 +4,8 @@ var util = require('util');
 var colors = require('colors');
 var Gaze = require('gaze').Gaze;
 
-var helper = require('./lib/helper.js');
-var uploader = require('./lib/uploader.js').uploader;
+var helper = require('../lib/helper.js');
+var uploader = require('../lib/uploader.js').uploader;
 
 module.exports = function(grunt) {
 
@@ -50,13 +50,12 @@ module.exports = function(grunt) {
       }
 
       var ret = grunt.file.isMatch(pattern, filepath);
-      if(!ret) {
+      if (!ret) {
         return;
       }
 
       var rel_path = path.relative(project_root, filepath);
       var cdn_path = path.normalize(cdn_root + path.dirname(rel_path) + '/');
-
       uploader(helper.extend({
         fullpath: rel_path,
         cdn_path: cdn_path,

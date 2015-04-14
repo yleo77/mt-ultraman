@@ -5,7 +5,7 @@ var util = require('util');
 var UglifyJS = require("uglify-js");
 var CleanCSS = require('clean-css');
 
-var helper = require('./lib/helper.js');
+var helper = require('../lib/helper.js');
 var jsMap;
 var build_dir;
 
@@ -16,11 +16,11 @@ CleanCSS.prototype.minify = function(source) {
   } else if (Array.isArray(source)) {
     return this._oldminify(source.map(function(item) {
       return fs.readFileSync(item);
-    }))
+    }));
   } else {
     throw new Error('传入参数有误，请检查');
   }
-}
+};
 
 CleanCSS = new CleanCSS();
 
@@ -40,17 +40,17 @@ module.exports = function(grunt) {
     build_dir = config.build_dir;
 
     grunt.log.writeln();
-    grunt.log.writeln('源文件目录: ' + (config.path).green.underline );
+    grunt.log.writeln('源文件目录: ' + (config.path).green.underline);
 
     var done = this.async();
 
     // js 时才需要
-    if(type != 'css'){
+    if (type != 'css') {
       var version_map = path.normalize(config.path + config.version_map);
-      
-      if(!fs.existsSync(version_map)) {
+
+      if (!fs.existsSync(version_map)) {
         jsMap = null;
-      }  else {
+      } else {
         var fileConfig = helper.getFileConfig(version_map);
         jsMap = fileConfig.jsmap;
       }
@@ -60,9 +60,9 @@ module.exports = function(grunt) {
     if (type === 'all') {
       ret = [];
       ret.push(transfer(config, 'js'));
-      ret.push(transfer(config, 'css'))
+      ret.push(transfer(config, 'css'));
       ret = (ret[0] === TASK_STATUS.success &&
-        ret[1] === TASK_STATUS.success) ?
+          ret[1] === TASK_STATUS.success) ?
         TASK_STATUS.success :
         TASK_STATUS.fail;
     } else {
@@ -82,9 +82,9 @@ module.exports = function(grunt) {
     grunt.log.writeln();
     grunt.log.writeln('开始合并压缩 ' + (type).green + ' 文件');
 
-    if(type == 'js' && !jsMap){
+    if (type == 'js' && !jsMap) {
       grunt.log.writeln();
-      grunt.log.writeln( 'Warning'.yellow + ': 未找到js版本信息. 压缩文件将不添加版本信息' );
+      grunt.log.writeln('Warning'.yellow + ': 未找到js版本信息. 压缩文件将不添加版本信息');
     }
 
     grunt.log.writeln();
@@ -110,7 +110,7 @@ module.exports = function(grunt) {
           continue;
         }
 
-        var files = set [target];
+        var files = set[target];
 
         target = build_dir + target;
 
@@ -138,7 +138,7 @@ module.exports = function(grunt) {
     }
 
     src = src.map(function(item, index) {
-      if(index < def_src_len){
+      if (index < def_src_len) {
         return config.path + item;
       } else {
         return '!' + config.path + item;
@@ -185,14 +185,16 @@ module.exports = function(grunt) {
 function getItemFV(filename) {
 
   // 无jsmap 无版本信息时不用添加版本号
-  if(!jsMap) {return ''; }
+  if (!jsMap) {
+    return '';
+  }
   filename = path.basename(filename).replace(/-<%=( *)fv( *)%>/g, '');
   var ret = '001';
   var item;
 
   for (var i in jsMap) {
     item = path.basename(jsMap[i]);
-    if (item.indexOf(filename) != 0) {
+    if (item.indexOf(filename) !== 0) {
       continue;
     }
     item = item.split('?');

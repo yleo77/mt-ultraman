@@ -1,7 +1,7 @@
 var path = require('path');
 
-var fetch = require('./lib/fetch.js');
-var helper = require('./lib/helper.js');
+var fetch = require('../lib/fetch.js');
+var helper = require('../lib/helper.js');
 
 var build_dir;
 var cdn_path;

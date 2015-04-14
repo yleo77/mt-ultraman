@@ -1,6 +1,6 @@
 var path = require('path');
 var fs = require('fs');
-var helper = require('./lib/helper.js');
+var helper = require('../lib/helper.js');
 var colors = require('colors');
 
 module.exports = function(grunt) {
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
       build_dir = build_dir + 'css/';
     } else if (/javascript|js/.test(type)) {
       build_dir = build_dir + 'js/';
-    } else { // 
+    } else { //
       build_dir = build_dir;
     }
 
