@@ -8,18 +8,25 @@ var helper = require('../lib/helper.js');
 var uploader = require('../lib/uploader.js').uploader;
 
 module.exports = function(grunt) {
-
-  grunt.registerTask('watchy', 'watchi files', function(project, type, env) {
+  
+  helper.runnify(grunt);
+  grunt.registerTask('watchy', 'watch files', function(project) {
 
     var done = this.async();
-    var config = helper.projectify(project, type, grunt);
+    var config = helper.projectify(project, undefined, grunt);
 
-    env = env || config.env;
     project = config.project;
 
-    var environment = grunt.config.get('upload').options.environment[env];
-    var cdn_root = config.cdn_root.replace(config.path, '');
-    var project_root = process.cwd();
+    // 为其他任务队列留的接口.
+    var tasks = this.options().tasks;
+    tasks = tasks.map(function(task) {
+      if (task.split(':').length === 1) {
+        task = task + ':' + project + '::__file__';
+      } else {
+        task.replace('__project__', project);
+      }
+      return task;
+    });
 
     helper.log();
     helper.log('        监听目录:  ' + (config.path).green.underline);
@@ -33,7 +40,7 @@ module.exports = function(grunt) {
 
     var gaze = new Gaze(pattern);
     gaze.on('error', function(error) {
-      helper.log('监听出现异常，程序退出，请检查配置');
+      grunt.log.errorlns('监听出现异常，程序退出，请检查配置');
       done(false);
     });
 
@@ -44,7 +51,6 @@ module.exports = function(grunt) {
     });
     gaze.on('all', function(event, filepath) {
 
-      // console.log(filepath + ' was ' + event);
       if (event === 'deleted') {
         return;
       }
@@ -54,16 +60,18 @@ module.exports = function(grunt) {
         return;
       }
 
-      var rel_path = path.relative(project_root, filepath);
-      var cdn_path = path.normalize(cdn_root + path.dirname(rel_path) + '/');
-      uploader(helper.extend({
-        fullpath: rel_path,
-        cdn_path: cdn_path,
-      }, environment), callback);
-    });
+      var options = {
+        args: tasks.slice(0).map(function(task) {
+          return task
+            .replace('__file__', path.relative(config.path, filepath));
+        })
+      };
 
-    function callback(o) {
-      helper.log(helper.pretty(o.fullpath), (o.response.statusCode == 200) ? 'success' : 'fail');
-    }
+      grunt.task.runImmediately(options).then(function(res) {
+        // console.log(res);
+      }, function(err) {
+        grunt.log.errorlns('wachy: 任务执行异常, 自动上传失败, 请检查');
+      });
+    });
   });
 };
