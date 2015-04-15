@@ -56,10 +56,6 @@ module.exports = function(grunt) {
 
     var sfiles = null; // 需要上传的目标文件(夹)
     var mode = 0;
-    // if(config.upload_files) {     // watch 方式
-    //   sfiles = config.upload_files;
-    //   mode = 1;
-    // } else
 
     if (files) { // 指定文件或目录形式
       sfiles = path.normalize(config.path + files);
